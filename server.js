@@ -3,7 +3,6 @@ var app = express();
 
 // routes
 app.get('/', function(req, res){
-  //res.send('hello world');
   res.sendfile(__dirname + '/index.html');  
 });
 
@@ -27,7 +26,17 @@ io.sockets.on('connection', function(socket){
 
   socket.on('my other event', function (data) {
     console.log(data);
-  });  
+  });
+
+  io.sockets.emit('this', { will: 'be received by everyone'});
+
+  socket.on('private message', function (from, msg) {
+    console.log('I received a private message by ', from, ' saying ', msg);
+  });
+
+  socket.on('disconnect', function () {
+    io.sockets.emit('user with id %s disconnected', socket.id);
+  });
 
 });
 

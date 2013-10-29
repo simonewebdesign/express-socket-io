@@ -9,5 +9,8 @@
     // fire an event
     socket.emit('my other event', { my: 'data from the client' });
 
+    // send a private message
+    socket.emit('private message', 'John Doe', 'Hi. How are you?');
+
   });
 </script>
