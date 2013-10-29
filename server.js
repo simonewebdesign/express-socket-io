@@ -17,8 +17,7 @@ var io = require('socket.io').listen(app.listen(3000));
 io.sockets.on('connection', function(socket){
 
   console.log('Connection established with a client');
-
-  // write your code inside this callback function.
+  io.sockets.emit('client connected', socket.id);
 
   // this event will occur in the client as soon 
   // as the connection is established
@@ -35,7 +34,7 @@ io.sockets.on('connection', function(socket){
   });
 
   socket.on('disconnect', function () {
-    io.sockets.emit('user with id %s disconnected', socket.id);
+    io.sockets.emit('client disconnected', socket.id);
   });
 
 });

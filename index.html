@@ -1,6 +1,8 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var socket = io.connect('http://localhost');
+
+  // an example event handler
   socket.on('news', function (data) {
 
     // log data from the server
@@ -13,4 +15,15 @@
     socket.emit('private message', 'John Doe', 'Hi. How are you?');
 
   });
+
+    // occurs when a client connects
+    socket.on('client connected', function(id) {
+      console.log('client with id', id, 'connected');
+    })
+
+    // occurs when a client disconnects
+    socket.on('client disconnected', function(id) {
+      console.log('client with id', id, 'disconnected');
+    });
+
 </script>
