@@ -10,6 +10,10 @@ app.get('/foo', function(req, res){
   res.send('foo!');
 });
 
+app.get('/news', function(req, res) {
+  res.sendfile(__dirname + '/news.html');
+});
+
 
 // socket.io
 var io = require('socket.io').listen(app.listen(3000));
@@ -40,17 +44,30 @@ io.sockets.on('connection', function(socket){
 });
 
 
+// socket.io namespaced on /news
+io.of('/news').on('connection', function(socket) {
+
+  console.log('Connection established with a client on /news');
+  
+  socket.emit('handshake', { socket_id: socket.id, namespace: '/news'});
+
+  socket.emit('ping', 'ping');
+
+  socket.on('pong', function(message_from_client){
+    console.log(message_from_client);
+  });
+});
+
+
 // Setup termination handlers (for exit and a list of signals).
 ['SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT',
  'SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGTERM'
 ].forEach(function(element, index, array) {
 
-  process.on(element, function() {
+  process.on(element, function(){
 
-    if (typeof element === 'string') {
-      console.log('%s: Received %s - terminating...', Date(Date.now()), element);
-      process.exit(1);
-    };
+    console.log('%s: Received %s - terminating...', Date(Date.now()), element);
+    process.exit(1);
   });
 });
 

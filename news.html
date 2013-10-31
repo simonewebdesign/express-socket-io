@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>News</title>
+</head>
+<body>
+  <h1>News</h1>
+  <h2>This is a client</h2>
+
+  <p>See your browser console.</p>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var news = io.connect('http://localhost/news');
+
+    // occurs when a client connects
+    news.on('handshake', function(client) {
+      console.log("Client data:");
+      console.log(client);
+    })
+
+    news.on('ping', function(ping){
+      console.log("ping received");
+    });
+    
+    // reply
+    news.emit('pong', 'I am the client!');
+
+  </script>
+</body>
+</html>
